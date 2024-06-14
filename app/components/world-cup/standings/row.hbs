@@ -1,4 +1,11 @@
-<tr class="text-gray-800 dark:text-white text-lg {{if (eq @index 0) 'bg-green-900'}} {{if (eq (inc @index) @totalRows) 'bg-red-900'}} bg-opacity-30">
+<tr class="text-gray-800 dark:text-white text-lg relative {{if (eq @index 0) 'bg-green-900'}} {{if (eq (inc @index) @totalRows) 'bg-red-900'}} bg-opacity-30">
+  <td class="max-w-0 overflow-visible">
+    {{#if @standing.isLive}}
+      <div class="absolute left-0 top-0 h-full w-1 bg-red-600 animate-pulse rounded-sm">
+      </div>
+    {{/if}}
+  </td>
+
   <td>
     <div class="flex flex-row space-x-2 items-center p-2 pl-4 fit-content">
       <Avatar @url={{@standing.player.image}}  @title={{@standing.player.name}} @isLive={{@standing.isLive}} class="w-6 h-6" />
