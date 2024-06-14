@@ -154,6 +154,24 @@ export interface FifaStandingWireFormat {
   GoalsDiference: number;
   IdGroup: string;
 }
+
+export interface UefaStandingWireFormat {
+  team: {
+    associationId: string;
+    countryCode: string;
+    internationalName: string;
+  };
+  drawn: number;
+  goalDifference: number;
+  goalsAgainst: number;
+  goalsFor: number;
+  isLive: boolean;
+  lost: number;
+  played: number;
+  points: number;
+  won: number;
+}
+
 const comp: competitionType = competitionType.Uefa;
 
 function fifaFixtureToStatus(fifaFixture: MatchResult) {
@@ -232,6 +250,67 @@ function parseFifaFixture(fifaFixture: any): FixtureWireformat {
   return fixture;
 }
 
+function parseFifaStandings(
+  standings: Array<FifaStandingWireFormat>,
+  liveFixtures: Array<MatchResult>
+): Array<TeamStanding> {
+  return standings.map((standing) => {
+    return {
+      drawn: standing?.Drawn,
+      goalDifference: standing?.GoalsDiference,
+      goalsAgainst: standing?.Against,
+      goalsFor: standing?.For,
+      isLive: liveFixtures.any(
+        (fixture) =>
+          fixture.AwayTeam.IdCountry === standing.Team.IdCountry ||
+          fixture.HomeTeam.IdCountry === standing.Team.IdCountry ||
+          fixture.HomeTeam.IdCountry === standing.Team.IdAssociation ||
+          fixture.AwayTeam.IdCountry === standing.Team.IdAssociation
+      ),
+      lost: standing?.Lost,
+      played: standing?.Played,
+      points: standing?.Points,
+      won: standing?.Won,
+      team: {
+        internationalName: standing?.Team?.ShortClubName,
+        associationLogoUrl: '',
+        countryCode: standing?.Team?.IdCountry ?? standing?.Team?.IdAssociation,
+        isPlaceholder: false,
+      },
+    };
+  }) as Array<TeamStanding>;
+}
+
+function parseUefaStandings(
+  standings: Array<UefaStandingWireFormat>,
+  liveFixtures: Array<MatchResult>
+): Array<TeamStanding> {
+  return standings.map((standing) => {
+    return {
+      drawn: standing?.drawn,
+      goalDifference: standing?.goalDifference,
+      goalsAgainst: standing?.goalsAgainst,
+      goalsFor: standing?.goalsFor,
+      isLive: liveFixtures.any(
+        (fixture) =>
+          fixture.AwayTeam.IdCountry === standing.team.countryCode ||
+          fixture.HomeTeam.IdCountry === standing.team.countryCode ||
+          fixture.HomeTeam.IdCountry === standing.team.associationId ||
+          fixture.AwayTeam.IdCountry === standing.team.associationId
+      ),
+      lost: standing?.lost,
+      played: standing?.played,
+      points: standing?.points,
+      won: standing?.won,
+      team: {
+        internationalName: standing.team.internationalName,
+        associationLogoUrl: '',
+        countryCode: standing.team.countryCode,
+        isPlaceholder: false,
+      },
+    };
+  }) as Array<TeamStanding>;
+}
 export default class Api extends Service {
   @tracked model!: {
     standings: Array<GroupStandingWireFormat>;
@@ -273,7 +352,7 @@ export default class Api extends Service {
       liveScores: liveScores,
     };
 
-    let standings: FifaStandingWireFormat[] = [];
+    let standings: Array<FifaStandingWireFormat | UefaStandingWireFormat>;
 
     let fixtures: FixtureWireformat[] = this.model.liveScores.map((fixture) => {
       switch (comp) {
@@ -286,7 +365,9 @@ export default class Api extends Service {
 
     switch (comp) {
       case competitionType.Uefa:
-        standings = result[1];
+        standings = result[0].flatMap(
+          (group: { items: Array<UefaStandingWireFormat> }) => group.items
+        ) as Array<UefaStandingWireFormat>;
         break;
       case competitionType.Fifa:
         let fifaStandings = result[1].Results as Array<FifaStandingWireFormat>;
@@ -297,34 +378,25 @@ export default class Api extends Service {
     let liveFixtures = this.model.liveScores.filter(
       (fixture) => fixture.MatchStatus === 3
     );
-    console.log(fixtures);
 
-    let mappedStandings = standings.map((standing) => {
-      return {
-        drawn: standing?.Drawn,
-        goalDifference: standing?.GoalsDiference,
-        goalsAgainst: standing?.Against,
-        goalsFor: standing?.For,
-        isLive: liveFixtures.any(
-          (fixture) =>
-            fixture.AwayTeam.IdCountry === standing.Team.IdCountry ||
-            fixture.HomeTeam.IdCountry === standing.Team.IdCountry ||
-            fixture.HomeTeam.IdCountry === standing.Team.IdAssociation ||
-            fixture.AwayTeam.IdCountry === standing.Team.IdAssociation
-        ),
-        lost: standing?.Lost,
-        played: standing?.Played,
-        points: standing?.Points,
-        won: standing?.Won,
-        team: {
-          internationalName: standing?.Team?.ShortClubName,
-          associationLogoUrl: '',
-          countryCode:
-            standing?.Team?.IdCountry ?? standing?.Team?.IdAssociation,
-          isPlaceholder: false,
-        },
-      };
-    }) as Array<TeamStanding>;
+    let mappedStandings: Array<TeamStanding> = [];
+
+    switch (comp) {
+      case competitionType.Fifa:
+        mappedStandings = parseFifaStandings(
+          standings as Array<FifaStandingWireFormat>,
+          liveFixtures
+        );
+        break;
+
+      case competitionType.Uefa:
+        standings = standings as Array<UefaStandingWireFormat>;
+        mappedStandings = parseUefaStandings(
+          standings as Array<UefaStandingWireFormat>,
+          liveFixtures
+        );
+        break;
+    }
 
     this.model.standings = [
       { items: mappedStandings },
