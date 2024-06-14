@@ -6,7 +6,7 @@ import Api, {
 import Component from '@glimmer/component';
 import Sweepstakes, { Player } from 'worldcup/services/sweepstakes';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
+import { computed } from '@ember/object';
 
 interface Args {
   standings: Array<GroupStandingWireFormat>;
@@ -27,17 +27,18 @@ interface PlayerStanding {
 
 export default class WorldCupStandingsComponent extends Component<Args> {
   @service declare sweepstakes: Sweepstakes;
-  @tracked teamStandings: Partial<Record<CountryCode, TeamStanding>> = {};
   @service declare api: Api;
 
-  constructor(owner: unknown, args: Args) {
-    super(owner, args);
-
+  @computed('api.model.standings')
+  get teamStandings(): Partial<Record<CountryCode, TeamStanding>> {
+    let standings: Partial<Record<CountryCode, TeamStanding>> = {};
     this.api.model.standings
       .flatMap((groupStanding) => groupStanding.items)
       .forEach((teamStanding) => {
-        this.teamStandings[teamStanding.team.countryCode] = teamStanding;
+        standings[teamStanding.team.countryCode] = teamStanding;
       });
+
+    return standings;
   }
 
   get totals(): Array<PlayerStanding> {

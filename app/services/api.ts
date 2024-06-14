@@ -114,25 +114,28 @@ export interface GroupStandingWireFormat {
 }
 
 export interface MatchResult {
-  MatchTime: any;
-  GroupName: [{ Description: string }];
-  StageName: [{ Description: string }];
-  Date: string;
-  HomeTeam: {
+  MatchTime?: any;
+  GroupName?: [{ Description: string }];
+  StageName?: [{ Description: string }];
+  Date?: string;
+  HomeTeam?: {
     IdCountry: string;
     Score: number;
     ShortClubName: string;
     IdAssociation: string;
   };
-  AwayTeam: {
+  AwayTeam?: {
     IdCountry: string;
     Score: number;
     ShortClubName: string;
     IdAssociation: string;
   };
-  MatchStatus: number; // 1 == Not started? 3 == live,
-  Period: number; // 0 == not started? 3 == first half? 4 == half time, 5 == second half,
+  MatchStatus?: number; // 1 == Not started? 3 == live,
+  Period?: number; // 0 == not started? 3 == first half? 4 == half time, 5 == second half,
   Winner?: string;
+  status?: string;
+  awayTeam?: { countryCode: string };
+  homeTeam?: { countryCode: string };
 }
 export interface LiveScoreWireFormat {
   Results: Array<MatchResult>;
@@ -262,10 +265,10 @@ function parseFifaStandings(
       goalsFor: standing?.For,
       isLive: liveFixtures.any(
         (fixture) =>
-          fixture.AwayTeam.IdCountry === standing.Team.IdCountry ||
-          fixture.HomeTeam.IdCountry === standing.Team.IdCountry ||
-          fixture.HomeTeam.IdCountry === standing.Team.IdAssociation ||
-          fixture.AwayTeam.IdCountry === standing.Team.IdAssociation
+          fixture.AwayTeam?.IdCountry === standing.Team.IdCountry ||
+          fixture.HomeTeam?.IdCountry === standing.Team.IdCountry ||
+          fixture.HomeTeam?.IdCountry === standing.Team.IdAssociation ||
+          fixture.AwayTeam?.IdCountry === standing.Team.IdAssociation
       ),
       lost: standing?.Lost,
       played: standing?.Played,
@@ -293,10 +296,8 @@ function parseUefaStandings(
       goalsFor: standing?.goalsFor,
       isLive: liveFixtures.any(
         (fixture) =>
-          fixture.AwayTeam.IdCountry === standing.team.countryCode ||
-          fixture.HomeTeam.IdCountry === standing.team.countryCode ||
-          fixture.HomeTeam.IdCountry === standing.team.associationId ||
-          fixture.AwayTeam.IdCountry === standing.team.associationId
+          fixture.homeTeam?.countryCode === standing.team.countryCode ||
+          fixture.awayTeam?.countryCode === standing.team.countryCode
       ),
       lost: standing?.lost,
       played: standing?.played,
@@ -376,7 +377,7 @@ export default class Api extends Service {
     }
 
     let liveFixtures = this.model.liveScores.filter(
-      (fixture) => fixture.MatchStatus === 3
+      (fixture) => fixture.MatchStatus === 3 || fixture.status === 'LIVE'
     );
 
     let mappedStandings: Array<TeamStanding> = [];
