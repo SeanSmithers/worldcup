@@ -7,7 +7,7 @@ const standingsEndpoint = `https://standings.uefa.com/v1/standings?competitionId
 const apiKey = `ceeee1a5bb209502c6c438abd8f30aef179ce669bb9288f2d1cf2fa276de03f4`;
 const liveScoreEndpoint = `https://api.fifa.com/api/v3/live/football/range?from=2022-12-01T00:00:00Z&to=2022-12-20T00:00:00Z&IdSeason=255711&IdCompetition=17`;
 const fifaStandingsEndpoint = `https://api.fifa.com/api/v3/calendar/17/255711/285063/standing?language=en`;
-const uefaLiveScoreEndpoint = `https://match.uefa.com/v5/matches?competitionId=3&limit=30&offset=0&order=ASC&phase=TOURNAMENT&seasonYear=2024`;
+const uefaLiveScoreEndpoint = `https://match.uefa.com/v5/matches?competitionId=3&limit=51&offset=0&order=ASC&phase=TOURNAMENT&seasonYear=2024`;
 
 enum competitionType {
   Fifa,
