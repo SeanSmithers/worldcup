@@ -1,0 +1,63 @@
+{
+  "teams": [
+    { "name": "Mexico",                    "code": "MEX", "flag": "🇲🇽",  "group": "A", "odds":    67, "oddsFractional": "66/1",   "fifaRank":  15, "tier": 2 },
+    { "name": "Korea Republic",            "code": "KOR", "flag": "🇰🇷",  "group": "A", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  25, "tier": 4 },
+    { "name": "Czechia",                   "code": "CZE", "flag": "🇨🇿",  "group": "A", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  41, "tier": 5 },
+    { "name": "South Africa",              "code": "RSA", "flag": "🇿🇦",  "group": "A", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  60, "tier": 6 },
+
+    { "name": "Switzerland",               "code": "SUI", "flag": "🇨🇭",  "group": "B", "odds":    81, "oddsFractional": "80/1",   "fifaRank":  19, "tier": 3 },
+    { "name": "Canada",                    "code": "CAN", "flag": "🇨🇦",  "group": "B", "odds":   151, "oddsFractional": "150/1",  "fifaRank":  30, "tier": 3 },
+    { "name": "Bosnia and Herzegovina",    "code": "BIH", "flag": "🇧🇦",  "group": "B", "odds":   151, "oddsFractional": "150/1",  "fifaRank":  65, "tier": 4 },
+    { "name": "Qatar",                     "code": "QAT", "flag": "🇶🇦",  "group": "B", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  55, "tier": 5 },
+
+    { "name": "Brazil",                    "code": "BRA", "flag": "🇧🇷",  "group": "C", "odds":     9, "oddsFractional": "8/1",    "fifaRank":   6, "tier": 1 },
+    { "name": "Morocco",                   "code": "MAR", "flag": "🇲🇦",  "group": "C", "odds":    67, "oddsFractional": "66/1",   "fifaRank":   8, "tier": 2 },
+    { "name": "Scotland",                  "code": "SCO", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "group": "C", "odds":   251, "oddsFractional": "250/1",  "fifaRank":  43, "tier": 4 },
+    { "name": "Haiti",                     "code": "HAI", "flag": "🇭🇹",  "group": "C", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  82, "tier": 6 },
+
+    { "name": "United States",             "code": "USA", "flag": "🇺🇸",  "group": "D", "odds":    67, "oddsFractional": "66/1",   "fifaRank":  16, "tier": 2 },
+    { "name": "T\u00fcrkiye",              "code": "TUR", "flag": "🇹🇷",  "group": "D", "odds":   101, "oddsFractional": "100/1",  "fifaRank":  22, "tier": 3 },
+    { "name": "Paraguay",                  "code": "PAR", "flag": "🇵🇾",  "group": "D", "odds":   251, "oddsFractional": "250/1",  "fifaRank":  40, "tier": 4 },
+    { "name": "Australia",                 "code": "AUS", "flag": "🇦🇺",  "group": "D", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  27, "tier": 5 },
+
+    { "name": "Germany",                   "code": "GER", "flag": "🇩🇪",  "group": "E", "odds":    15, "oddsFractional": "14/1",   "fifaRank":  10, "tier": 1 },
+    { "name": "Ecuador",                   "code": "ECU", "flag": "🇪🇨",  "group": "E", "odds":   101, "oddsFractional": "100/1",  "fifaRank":  24, "tier": 3 },
+    { "name": "C\u00f4te d'Ivoire",        "code": "CIV", "flag": "🇨🇮",  "group": "E", "odds":   151, "oddsFractional": "150/1",  "fifaRank":  34, "tier": 3 },
+    { "name": "Cura\u00e7ao",              "code": "CUW", "flag": "🇨🇼",  "group": "E", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  83, "tier": 6 },
+
+    { "name": "Netherlands",               "code": "NED", "flag": "🇳🇱",  "group": "F", "odds":    15, "oddsFractional": "14/1",   "fifaRank":   7, "tier": 1 },
+    { "name": "Japan",                     "code": "JPN", "flag": "🇯🇵",  "group": "F", "odds":    51, "oddsFractional": "50/1",   "fifaRank":  18, "tier": 2 },
+    { "name": "Sweden",                    "code": "SWE", "flag": "🇸🇪",  "group": "F", "odds":   151, "oddsFractional": "150/1",  "fifaRank":  38, "tier": 4 },
+    { "name": "Tunisia",                   "code": "TUN", "flag": "🇹🇳",  "group": "F", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  45, "tier": 5 },
+
+    { "name": "Belgium",                   "code": "BEL", "flag": "🇧🇪",  "group": "G", "odds":    21, "oddsFractional": "20/1",   "fifaRank":   9, "tier": 2 },
+    { "name": "Egypt",                     "code": "EGY", "flag": "🇪🇬",  "group": "G", "odds":   251, "oddsFractional": "250/1",  "fifaRank":  28, "tier": 4 },
+    { "name": "IR Iran",                   "code": "IRN", "flag": "🇮🇷",  "group": "G", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  21, "tier": 4 },
+    { "name": "New Zealand",               "code": "NZL", "flag": "🇳🇿",  "group": "G", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  85, "tier": 6 },
+
+    { "name": "Spain",                     "code": "ESP", "flag": "🇪🇸",  "group": "H", "odds":   5.5, "oddsFractional": "9/2",    "fifaRank":   2, "tier": 1 },
+    { "name": "Uruguay",                   "code": "URU", "flag": "🇺🇾",  "group": "H", "odds":    67, "oddsFractional": "66/1",   "fifaRank":  17, "tier": 2 },
+    { "name": "Cabo Verde",                "code": "CPV", "flag": "🇨🇻",  "group": "H", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  68, "tier": 6 },
+    { "name": "Saudi Arabia",              "code": "KSA", "flag": "🇸🇦",  "group": "H", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  61, "tier": 6 },
+
+    { "name": "France",                    "code": "FRA", "flag": "🇫🇷",  "group": "I", "odds":   5.5, "oddsFractional": "9/2",    "fifaRank":   1, "tier": 1 },
+    { "name": "Norway",                    "code": "NOR", "flag": "🇳🇴",  "group": "I", "odds":    34, "oddsFractional": "33/1",   "fifaRank":  31, "tier": 2 },
+    { "name": "Senegal",                   "code": "SEN", "flag": "🇸🇳",  "group": "I", "odds":   151, "oddsFractional": "150/1",  "fifaRank":  14, "tier": 3 },
+    { "name": "Iraq",                      "code": "IRQ", "flag": "🇮🇶",  "group": "I", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  57, "tier": 5 },
+
+    { "name": "Argentina",                 "code": "ARG", "flag": "🇦🇷",  "group": "J", "odds":    11, "oddsFractional": "10/1",   "fifaRank":   3, "tier": 1 },
+    { "name": "Austria",                   "code": "AUT", "flag": "🇦🇹",  "group": "J", "odds":   101, "oddsFractional": "100/1",  "fifaRank":  23, "tier": 3 },
+    { "name": "Algeria",                   "code": "ALG", "flag": "🇩🇿",  "group": "J", "odds":   251, "oddsFractional": "250/1",  "fifaRank":  29, "tier": 4 },
+    { "name": "Jordan",                    "code": "JOR", "flag": "🇯🇴",  "group": "J", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  63, "tier": 6 },
+
+    { "name": "Portugal",                  "code": "POR", "flag": "🇵🇹",  "group": "K", "odds":    11, "oddsFractional": "10/1",   "fifaRank":   5, "tier": 1 },
+    { "name": "Colombia",                  "code": "COL", "flag": "🇨🇴",  "group": "K", "odds":    41, "oddsFractional": "40/1",   "fifaRank":  13, "tier": 2 },
+    { "name": "Congo DR",                  "code": "COD", "flag": "🇨🇩",  "group": "K", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  46, "tier": 5 },
+    { "name": "Uzbekistan",                "code": "UZB", "flag": "🇺🇿",  "group": "K", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  50, "tier": 5 },
+
+    { "name": "England",                   "code": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "group": "L", "odds":   7.5, "oddsFractional": "13/2",   "fifaRank":   4, "tier": 1 },
+    { "name": "Croatia",                   "code": "CRO", "flag": "🇭🇷",  "group": "L", "odds":   101, "oddsFractional": "100/1",  "fifaRank":  11, "tier": 3 },
+    { "name": "Panama",                    "code": "PAN", "flag": "🇵🇦",  "group": "L", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  33, "tier": 5 },
+    { "name": "Ghana",                     "code": "GHA", "flag": "🇬🇭",  "group": "L", "odds":   501, "oddsFractional": "500/1",  "fifaRank":  73, "tier": 6 }
+  ]
+}
