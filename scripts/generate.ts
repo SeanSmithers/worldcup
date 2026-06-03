@@ -83,41 +83,45 @@ function generateOnce(
   teamsByTier: Map<number, Team[]>,
   rnd: () => number,
 ): Assignment | null {
-  const playerOrder = shuffled(players.map((_, i) => i), rnd);
-  const pools = new Map<number, Team[]>();
-  const refillAll = () => {
-    for (const tier of tiers) pools.set(tier, shuffled(teamsByTier.get(tier)!, rnd));
-  };
-  refillAll();
-
+  // Tier-major construction with a fresh per-tier player shuffle so the
+  // "extra" (>8) players who must take a duplicate rotate between tiers —
+  // duplicates spread across the field instead of piling onto one player.
   const result: Assignment = players.map(() => []);
-  for (const pIdx of playerOrder) {
-    if ([...pools.values()].every((p) => p.length === 0)) refillAll();
-    const usedGroups = new Set<string>();
-    for (const tier of tiers) {
-      const pool = pools.get(tier)!;
-      const candidates = pool.filter((t) => !usedGroups.has(t.group));
+  const usedGroups: Set<string>[] = players.map(() => new Set<string>());
+
+  for (const tier of tiers) {
+    const playerOrder = shuffled(players.map((_, i) => i), rnd);
+    let pool = shuffled(teamsByTier.get(tier)!, rnd);
+
+    for (const pIdx of playerOrder) {
+      if (pool.length === 0) pool = shuffled(teamsByTier.get(tier)!, rnd);
+      const candidates = pool.filter((t) => !usedGroups[pIdx].has(t.group));
       if (candidates.length === 0) return null; // dead-end, retry whole draw
       const pick = candidates[Math.floor(rnd() * candidates.length)];
       pool.splice(pool.indexOf(pick), 1);
       result[pIdx].push(pick);
-      usedGroups.add(pick.group);
+      usedGroups[pIdx].add(pick.group);
     }
   }
   return result;
 }
 
-function pairwiseStats(assignment: Assignment, teamsPerPlayer: number): {
-  max: number;
-  identicalPairs: number;
-  total: number;
-} {
+interface DrawStats {
+  max: number;            // max pairwise overlap across any pair of players
+  identicalPairs: number; // pairs that share every team (hard violation)
+  total: number;          // sum of pairwise overlaps (lower = fewer dups)
+  maxDup: number;         // max count of "shared" teams any single player has
+  dupSpread: number;      // maxDup - minDup across players
+}
+
+function pairwiseStats(assignment: Assignment, teamsPerPlayer: number): DrawStats {
+  const n = assignment.length;
   const sets = assignment.map((p) => new Set(p.map((t) => t.code)));
   let max = 0;
   let identicalPairs = 0;
   let total = 0;
-  for (let i = 0; i < sets.length; i++) {
-    for (let j = i + 1; j < sets.length; j++) {
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
       let c = 0;
       for (const code of sets[i]) if (sets[j].has(code)) c++;
       total += c;
@@ -125,27 +129,78 @@ function pairwiseStats(assignment: Assignment, teamsPerPlayer: number): {
       if (c === teamsPerPlayer) identicalPairs++;
     }
   }
-  return { max, identicalPairs, total };
+
+  // Per-player duplicate count: how many of this player's teams are also
+  // held by at least one other player.
+  const teamPlayers = new Map<string, number[]>();
+  for (let i = 0; i < n; i++) {
+    for (const t of assignment[i]) {
+      const arr = teamPlayers.get(t.code) ?? [];
+      arr.push(i);
+      teamPlayers.set(t.code, arr);
+    }
+  }
+  const dupCount = new Array<number>(n).fill(0);
+  for (const owners of teamPlayers.values()) {
+    if (owners.length > 1) for (const p of owners) dupCount[p]++;
+  }
+  const maxDup = Math.max(...dupCount);
+  const minDup = Math.min(...dupCount);
+
+  return { max, identicalPairs, total, maxDup, dupSpread: maxDup - minDup };
 }
 
-function compareStats(
-  a: { max: number; identicalPairs: number; total: number },
-  b: { max: number; identicalPairs: number; total: number },
-): number {
-  if (a.max !== b.max) return a.max - b.max;
+// Hard invariants the script must never silently violate:
+//  - each player has exactly `teamsPerPlayer` teams
+//  - one team per tier (tier set equals [1..teamsPerPlayer])
+//  - all teams come from distinct groups (so a player's teams never meet
+//    in the group stage)
+function validate(assignment: Assignment, players: string[], teamsPerPlayer: number): void {
+  for (let i = 0; i < assignment.length; i++) {
+    const teams = assignment[i];
+    const name = players[i];
+    if (teams.length !== teamsPerPlayer) {
+      throw new Error(`${name}: has ${teams.length} teams, expected ${teamsPerPlayer}`);
+    }
+    const groups = new Set(teams.map((t) => t.group));
+    if (groups.size !== teamsPerPlayer) {
+      const counts = new Map<string, number>();
+      for (const t of teams) counts.set(t.group, (counts.get(t.group) ?? 0) + 1);
+      const dupes = [...counts.entries()].filter(([, c]) => c > 1).map(([g, c]) => `${g}×${c}`).join(", ");
+      throw new Error(`${name}: duplicate groups in roster — ${dupes}`);
+    }
+    const expectedTiers = Array.from({ length: teamsPerPlayer }, (_, k) => k + 1);
+    const actualTiers = teams.map((t) => t.tier).sort((a, b) => a - b);
+    if (actualTiers.join(",") !== expectedTiers.join(",")) {
+      throw new Error(`${name}: tier coverage [${actualTiers.join(",")}], expected [${expectedTiers.join(",")}]`);
+    }
+  }
+}
+
+function compareStats(a: DrawStats, b: DrawStats): number {
+  // Hardest first: no identical groupings, then pairwise overlap.
   if (a.identicalPairs !== b.identicalPairs) return a.identicalPairs - b.identicalPairs;
+  if (a.max !== b.max) return a.max - b.max;
+  // Soft: balance — fewest duplicates concentrated on any one player, then
+  // smallest spread, then total.
+  if (a.maxDup !== b.maxDup) return a.maxDup - b.maxDup;
+  if (a.dupSpread !== b.dupSpread) return a.dupSpread - b.dupSpread;
   return a.total - b.total;
 }
 
 // Local search: swap one team between two players within a single tier
 // (preserves the one-team-per-tier and distinct-groups invariants) whenever
-// the swap strictly improves pairwise overlap.
+// the swap strictly improves the combined stats — pairwise overlap first,
+// then balance of duplicates across players.
 function improveBySwaps(assignment: Assignment, teamsPerPlayer: number, rnd: () => number): void {
   const n = assignment.length;
   let stats = pairwiseStats(assignment, teamsPerPlayer);
   let progress = true;
-  while (progress && (stats.max > 1 || stats.identicalPairs > 0)) {
+  let iterations = 0;
+  // Cap iterations to keep total runtime bounded across many attempts.
+  while (progress && iterations < 200) {
     progress = false;
+    iterations++;
     const playerOrder = shuffled([...Array(n).keys()], rnd);
     const tierOrder = shuffled([...Array(teamsPerPlayer).keys()], rnd);
     outer: for (const i of playerOrder) {
@@ -188,7 +243,16 @@ function main(): void {
   );
 
   const rnd = mulberry32(seed);
-  let best: { assignment: Assignment; max: number; identicalPairs: number; total: number } | null = null;
+  // Combinatorial floor for max duplicates concentrated on any player: with
+  // N players × T teams each over a pool of `tierSize * tiers` teams, the
+  // sum of dup-counts equals 2*(N*T - poolSize) (each duplicate-team
+  // contributes 1 to each of the two players holding it). Divided evenly
+  // over N players gives the floor of maxDup.
+  const poolSize = teamsByTier.get(tiers[0])!.length * tiers.length;
+  const dupTeams = Math.max(0, players.length * teamsPerPlayer - poolSize);
+  const maxDupFloor = Math.ceil((2 * dupTeams) / players.length);
+
+  let best: { assignment: Assignment; stats: DrawStats } | null = null;
   let attempts = 0;
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
     attempts++;
@@ -196,14 +260,10 @@ function main(): void {
     if (!a) continue;
     improveBySwaps(a, teamsPerPlayer, rnd);
     const stats = pairwiseStats(a, teamsPerPlayer);
-    const candidate = { assignment: a, ...stats };
-    const better =
-      !best ||
-      candidate.max < best.max ||
-      (candidate.max === best.max && candidate.identicalPairs < best.identicalPairs) ||
-      (candidate.max === best.max && candidate.identicalPairs === best.identicalPairs && candidate.total < best.total);
-    if (better) best = candidate;
-    if (best!.max <= 1 && best!.identicalPairs === 0) break;
+    if (!best || compareStats(stats, best.stats) < 0) {
+      best = { assignment: a, stats };
+    }
+    if (best.stats.max <= 1 && best.stats.identicalPairs === 0 && best.stats.maxDup <= maxDupFloor) break;
   }
 
   if (!best) {
@@ -211,17 +271,24 @@ function main(): void {
     process.exit(1);
   }
 
+  try {
+    validate(best.assignment, players, teamsPerPlayer);
+  } catch (e) {
+    console.error(`Internal error — invariant violated: ${(e as Error).message}`);
+    process.exit(2);
+  }
+
   console.log(
-    `Attempts: ${attempts} | max pairwise overlap: ${best.max} | identical groupings: ${best.identicalPairs}`,
+    `Attempts: ${attempts} | max pairwise overlap: ${best.stats.max} | identical groupings: ${best.stats.identicalPairs} | max dup/player: ${best.stats.maxDup} (floor ${maxDupFloor})`,
   );
-  if (best.max > 1 || best.identicalPairs > 0) {
+  if (best.stats.max > 1 || best.stats.identicalPairs > 0) {
     console.warn("Soft constraint not met (max pairwise overlap > 1 or identical groupings).");
   }
 
   console.log("");
   for (let i = 0; i < players.length; i++) {
     const teams = best.assignment[i]
-      .map((t) => `${t.flag}  ${t.name} (Group ${t.group}, Tier ${t.tier})`)
+      .map((t) => `${t.flag} ${t.name} (${t.group})`)
       .join(", ");
     console.log(`${players[i]}: ${teams}`);
   }
