@@ -8,7 +8,11 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["scripts/**/*"]
+  "include": ["src", "scripts"]
 }

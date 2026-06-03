@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    font-family: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+    @apply bg-ink-50 text-ink-900;
+  }
+  html.dark body {
+    @apply bg-ink-900 text-ink-50;
+  }
+  ::selection {
+    @apply bg-brick-500 text-ink-50;
+  }
+}
+
+@layer utilities {
+  .tab-num {
+    font-variant-numeric: tabular-nums;
+  }
+}
