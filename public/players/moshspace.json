@@ -1,0 +1,160 @@
+{
+  "players": [
+    {
+      "name": "Aaron",
+      "teams": [
+        "USA",
+        "CAN",
+        "UZB"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Aaron"
+    },
+    {
+      "name": "BeniGoat",
+      "teams": [
+        "COL",
+        "EGY",
+        "AUS"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=BeniGoat"
+    },
+    {
+      "name": "Gambra",
+      "teams": [
+        "NED",
+        "ALG",
+        "PAN"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Gambra"
+    },
+    {
+      "name": "Poache",
+      "teams": [
+        "URU",
+        "ECU",
+        "CUW"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Poache"
+    },
+    {
+      "name": "Anto",
+      "teams": [
+        "CRO",
+        "TUR",
+        "CPV"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Anto"
+    },
+    {
+      "name": "artofwong",
+      "teams": [
+        "POR",
+        "KOR"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=artofwong"
+    },
+    {
+      "name": "Conor.",
+      "teams": [
+        "NOR",
+        "CIV",
+        "COD"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Conor."
+    },
+    {
+      "name": "Joebreaker",
+      "teams": [
+        "GER",
+        "IRN",
+        "JOR"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Joebreaker"
+    },
+    {
+      "name": "Lugosi",
+      "teams": [
+        "ENG",
+        "KSA"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Lugosi"
+    },
+    {
+      "name": "Mac Kell",
+      "teams": [
+        "ARG",
+        "QAT"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Mac%20Kell"
+    },
+    {
+      "name": "Mike",
+      "teams": [
+        "MEX",
+        "SWE",
+        "TUN"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Mike"
+    },
+    {
+      "name": "Panda",
+      "teams": [
+        "ESP",
+        "CZE"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Panda"
+    },
+    {
+      "name": "Ro",
+      "teams": [
+        "JPN",
+        "GHA",
+        "NZL"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Ro"
+    },
+    {
+      "name": "seanreid.",
+      "teams": [
+        "MAR",
+        "BIH",
+        "RSA"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=seanreid."
+    },
+    {
+      "name": "Se\u00e1n",
+      "teams": [
+        "BEL",
+        "PAR",
+        "IRQ"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Sean"
+    },
+    {
+      "name": "Si",
+      "teams": [
+        "BRA",
+        "SCO"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Si"
+    },
+    {
+      "name": "Stewe",
+      "teams": [
+        "SUI",
+        "SEN",
+        "HAI"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Stewe"
+    },
+    {
+      "name": "xCiar\u00e1nx",
+      "teams": [
+        "FRA",
+        "AUT"
+      ],
+      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=xCiaranx"
+    }
+  ]
+}
