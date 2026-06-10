@@ -111,7 +111,7 @@
         "GHA",
         "NZL"
       ],
-      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Ro"
+      "image": "players/moshspace/ro.png"
     },
     {
       "name": "seanreid.",
@@ -120,7 +120,7 @@
         "BIH",
         "RSA"
       ],
-      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=seanreid."
+      "image": "players/moshspace/seanreid.png"
     },
     {
       "name": "Se\u00e1n",
@@ -137,7 +137,7 @@
         "BRA",
         "SCO"
       ],
-      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Si"
+      "image": "players/moshspace/si.png"
     },
     {
       "name": "Stewe",
@@ -146,7 +146,7 @@
         "SEN",
         "HAI"
       ],
-      "image": "https://api.dicebear.com/9.x/notionists/svg?seed=Stewe"
+      "image": "players/moshspace/stewe.png"
     },
     {
       "name": "xCiar\u00e1nx",
