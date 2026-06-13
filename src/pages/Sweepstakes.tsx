@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Header } from "../components/Header";
 import { MatchesSection } from "../components/MatchesSection";
+import { ResultsSection } from "../components/ResultsSection";
 import { StandingsTable } from "../components/StandingsTable";
 import { useSweepstakes } from "../hooks/useSweepstakes";
 import { computePlayerStandings, type Player } from "../lib/sweepstakes";
@@ -31,12 +32,15 @@ export function Sweepstakes() {
     return map;
   }, [players]);
 
-  const { live, upcoming } = useMemo(() => {
+  const { live, finished, upcoming } = useMemo(() => {
     const all = snapshot?.matches ?? [];
     return {
       live: all
         .filter((m) => m.status === "live")
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+      finished: all
+        .filter((m) => m.status === "finished")
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
       upcoming: all
         .filter((m) => m.status === "upcoming")
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
@@ -58,6 +62,7 @@ export function Sweepstakes() {
           <>
             <StandingsTable rows={playerStandings} />
             <MatchesSection title="Live" matches={live} ownersByCode={ownersByCode} />
+            <ResultsSection matches={finished} ownersByCode={ownersByCode} />
             <MatchesSection title="Upcoming" matches={upcoming} ownersByCode={ownersByCode} />
           </>
         )}
